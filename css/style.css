@@ -1,0 +1,3508 @@
+/* =============================================================================
+   ArtyParty — Main Stylesheet
+   Mobile-first. RTL (Hebrew) primary direction.
+   Follows homepage-design-spec.md exactly.
+============================================================================= */
+
+/* =============================================================================
+   1. CSS Custom Properties
+============================================================================= */
+:root {
+  /* Brand colors */
+  --color-coral:          #E86B5A;
+  --color-coral-btn:      #D25545;
+  --color-coral-dark:     #b84438;
+  --color-teal:           #2BA5A5;
+  --color-teal-link:      #1F8A8A;
+  --color-teal-dark:      #186f6f;
+  --color-yellow:         #F5C842;
+  --color-navy:           #2C3E6B;
+  --color-warm-white:     #FFFBF8;
+  --color-light-coral-bg: #FFF0ED;
+  --color-light-teal-bg:  #E8F6F6;
+  --color-dark-text:      #2D2D2D;
+  --color-gray-text:      #6B7280;
+  --color-light-gray:     #F0F0F0;
+  --color-white:          #FFFFFF;
+  /* WhatsApp green: using darker #128C7E (not brand #25D366) for WCAG AA contrast
+     on white backgrounds — #25D366 fails 4.5:1 contrast ratio test */
+  --color-whatsapp:       #128C7E;
+  --color-whatsapp-dark:  #0e7268;
+
+  /* Shadows */
+  --shadow-card:   0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-hover:  0 4px 16px rgba(0, 0, 0, 0.10);
+  --shadow-modal:  0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-navbar: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  /* Border radii */
+  --radius-button: 8px;
+  --radius-card:   12px;
+  --radius-image:  12px;
+  --radius-input:  8px;
+
+  /* Transitions */
+  --transition-hover:  200ms ease;
+  --transition-layout: 300ms ease;
+
+  /* Typography */
+  --font-primary:  'Rubik', 'Arial', sans-serif;
+  --font-english:  'Poppins', 'Arial', sans-serif;
+
+  /* Spacing (8px grid) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-7: 56px;
+  --space-8: 64px;
+  --space-10: 80px;
+}
+
+/* =============================================================================
+   2. CSS Reset & Base
+============================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-dark-text);
+  background-color: var(--color-warm-white);
+  direction: rtl;
+  text-align: start;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+/* =============================================================================
+   3. Focus Indicators (Accessibility)
+============================================================================= */
+:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+/* =============================================================================
+   4. Skip Link (Accessibility)
+============================================================================= */
+.skip-link {
+  position: absolute;
+  inset-block-start: -100%;
+  inset-inline-start: 0;
+  background: var(--color-white);
+  color: var(--color-navy);
+  padding: 12px 24px;
+  border-radius: 0 0 var(--radius-button) var(--radius-button);
+  font-weight: 600;
+  z-index: 9999;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  inset-block-start: 0;
+}
+
+/* =============================================================================
+   5. Layout — Container
+============================================================================= */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--space-3); /* 24px on mobile */
+}
+
+/* =============================================================================
+   6. Typography Helpers
+============================================================================= */
+.section-heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 32px;
+  color: var(--color-navy);
+  text-align: center;
+  margin-block-end: 8px;
+}
+
+.section-heading--start {
+  text-align: start;
+}
+
+.section-intro {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-gray-text);
+  text-align: center;
+  margin-block-end: 32px;
+}
+
+.section-header {
+  margin-block-end: 0;
+}
+
+/* =============================================================================
+   7. Buttons
+============================================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: var(--radius-button);
+  padding: 0 24px;
+  min-height: 48px;
+  text-decoration: none;
+  transition:
+    background-color var(--transition-hover),
+    box-shadow var(--transition-hover),
+    border-color var(--transition-hover),
+    color var(--transition-hover),
+    transform var(--transition-hover);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Primary (Coral) */
+.btn--primary {
+  background-color: var(--color-coral-btn);
+  color: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.btn--primary:hover {
+  background-color: var(--color-coral-dark);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Navbar variant — slightly smaller */
+.btn--navbar {
+  min-height: 40px;
+  padding: 0 24px;
+  font-size: 16px;
+}
+
+/* WhatsApp (dark green for WCAG AA compliance) */
+.btn--whatsapp {
+  background-color: var(--color-whatsapp);
+  color: var(--color-white);
+  box-shadow: var(--shadow-card);
+}
+
+.btn--whatsapp:hover {
+  background-color: var(--color-whatsapp-dark);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn--large {
+  min-height: 52px;
+  padding: 0 32px;
+}
+
+/* Secondary (Teal border) */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-teal-link);
+  border: 2px solid var(--color-teal-link);
+}
+
+.btn--secondary:hover {
+  background-color: var(--color-teal-link);
+  color: var(--color-white);
+}
+
+/* Ghost (white border on dark bg) */
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  min-height: 52px;
+  padding: 0 32px;
+}
+
+.btn--ghost:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--color-white);
+}
+
+.btn__icon {
+  flex-shrink: 0;
+}
+
+/* =============================================================================
+   8. Placeholder Images
+============================================================================= */
+.placeholder-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-light-coral-bg);
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  padding: var(--space-3);
+  text-align: center;
+}
+
+.placeholder-img__label {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-gray-text);
+  font-style: italic;
+  max-width: 260px;
+}
+
+.placeholder-img--hero {
+  width: 100%;
+  height: 260px;
+  margin-block-start: var(--space-4);
+}
+
+.placeholder-img--card {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-image) var(--radius-image) 0 0;
+  background-color: var(--color-light-coral-bg);
+}
+
+.placeholder-img--about {
+  width: 100%;
+  height: 280px;
+  background-color: var(--color-light-teal-bg);
+}
+
+/* =============================================================================
+   9. Scroll Animations
+============================================================================= */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.fade-in-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delay via inline CSS custom property */
+.fade-in-up[style*="--stagger"] {
+  transition-delay: var(--stagger, 0ms);
+}
+
+.fade-in-up--delayed {
+  transition-delay: 100ms;
+}
+
+/* =============================================================================
+   10. Navbar
+============================================================================= */
+.navbar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 100;
+  background-color: var(--color-white);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: box-shadow var(--transition-layout);
+}
+
+.navbar--scrolled {
+  box-shadow: var(--shadow-navbar);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  height: 60px;
+}
+
+/* Logo placeholder */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar__logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+}
+
+.navbar__nav {
+  display: flex;
+}
+
+.logo-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.logo-placeholder__text {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--color-coral);
+  letter-spacing: -0.5px;
+}
+
+.logo-placeholder__tagline {
+  font-size: 18px;
+  color: var(--color-teal);
+}
+
+/* Desktop nav — hidden on mobile */
+.navbar__nav {
+  display: none;
+  margin-inline-start: auto; /* pushes nav to the reading-end side */
+}
+
+.navbar__nav-list {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar__nav-link {
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-navy);
+  text-decoration: none;
+  padding-block: 4px;
+  position: relative;
+  transition: color var(--transition-hover);
+}
+
+.navbar__nav-link::after {
+  content: '';
+  position: absolute;
+  inset-block-end: -4px;
+  inset-inline-start: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-coral);
+  transition: width var(--transition-hover);
+}
+
+.navbar__nav-link:hover {
+  color: var(--color-coral);
+}
+
+.navbar__nav-link:hover::after {
+  width: 100%;
+}
+
+/* B2B link: Teal hover */
+.navbar__nav-link--b2b:hover {
+  color: var(--color-teal);
+}
+
+.navbar__nav-link--b2b::after {
+  background-color: var(--color-teal);
+}
+
+/* Desktop CTA button — hidden on mobile */
+.btn--navbar-cta {
+  display: none;
+}
+
+/* Hamburger button */
+.navbar__hamburger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: var(--color-navy);
+  border-radius: var(--radius-button);
+  transition: background-color var(--transition-hover);
+}
+
+.navbar__hamburger:hover {
+  background-color: var(--color-light-gray);
+}
+
+/* =============================================================================
+   11. Mobile Menu Overlay
+============================================================================= */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  inset-inline-start: auto;
+  width: 100%;
+  max-width: 320px;
+  background-color: var(--color-white);
+  z-index: 200;
+  transform: translateX(-100%); /* slide in from left (RTL reading-end side) */
+  transition: transform var(--transition-layout);
+  overflow-y: auto;
+  padding-block-end: var(--space-6);
+}
+
+/* In RTL, translateX(-100%) hides it to the left. Open state: translateX(0) */
+.mobile-menu.is-open {
+  transform: translateX(0);
+}
+
+.mobile-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-layout);
+}
+
+.mobile-menu-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-block-end: 1px solid var(--color-light-gray);
+  min-height: 60px;
+}
+
+.mobile-menu__brand {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-coral);
+}
+
+.mobile-menu__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: var(--color-navy);
+  border-radius: var(--radius-button);
+  transition: background-color var(--transition-hover);
+}
+
+.mobile-menu__close:hover {
+  background-color: var(--color-light-gray);
+}
+
+.mobile-menu__list {
+  padding-block-start: var(--space-1);
+}
+
+.mobile-menu__link {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding-inline: 32px;
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--color-navy);
+  text-decoration: none;
+  border-block-end: 1px solid var(--color-light-gray);
+  transition: color var(--transition-hover), background-color var(--transition-hover);
+}
+
+.mobile-menu__link:hover {
+  color: var(--color-coral);
+  background-color: var(--color-light-coral-bg);
+}
+
+.mobile-menu__link--b2b:hover {
+  color: var(--color-teal);
+  background-color: var(--color-light-teal-bg);
+}
+
+/* =============================================================================
+   12. Hero Section
+============================================================================= */
+.hero {
+  background-color: var(--color-warm-white);
+  padding-block: var(--space-6);
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.hero__heading {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 38px;
+  color: var(--color-navy);
+  margin-block-end: var(--space-2);
+}
+
+.hero__subheadline {
+  margin-block-end: var(--space-4);
+}
+
+.hero__subheadline p {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+  margin-block-end: var(--space-1);
+}
+
+.hero__emphasis {
+  font-weight: 600 !important;
+  color: var(--color-navy) !important;
+  margin-block-start: var(--space-1);
+}
+
+.hero__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.hero__scroll-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-teal-link);
+  text-decoration: none;
+  padding-block: 8px;
+  transition: color var(--transition-hover);
+}
+
+.hero__scroll-link:hover {
+  color: var(--color-teal-dark);
+  text-decoration: underline;
+}
+
+.hero__scroll-icon {
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.hero__image-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.hero__brush-accent {
+  position: absolute;
+  inset-block-end: -8px;
+  inset-inline-end: -8px;
+  width: 60px;
+  height: 40px;
+  background-color: var(--color-coral);
+  border-radius: 50% 20% 50% 20%;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   13. Services Section
+============================================================================= */
+.services {
+  background-color: var(--color-light-coral-bg);
+  padding-block: var(--space-6);
+}
+
+.services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-block-start: var(--space-4);
+}
+
+/* Service Card */
+.card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform var(--transition-hover), box-shadow var(--transition-hover);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.card__image-wrap {
+  position: relative;
+  flex-shrink: 0;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: var(--color-light-coral-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card--teal .card__image-wrap {
+  background-color: var(--color-light-teal-bg);
+}
+
+.card__badge {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 12px;
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 12px;
+  height: 22px;
+  padding-inline: 8px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.card__accent-stripe {
+  height: 4px;
+  width: 100%;
+}
+
+.card__accent-stripe--coral {
+  background-color: var(--color-coral);
+}
+
+.card__accent-stripe--teal {
+  background-color: var(--color-teal);
+}
+
+.card__content {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card__heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-navy);
+  margin-block-end: 8px;
+}
+
+.card__body {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+  margin-block-end: 20px;
+  flex: 1;
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  transition: text-decoration var(--transition-hover), opacity var(--transition-hover);
+  align-self: flex-start;
+}
+
+.card__cta:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.card__cta--coral {
+  color: var(--color-coral);
+}
+
+.card__cta--teal {
+  color: var(--color-teal-link);
+}
+
+/* =============================================================================
+   14. Why ArtyParty Section
+============================================================================= */
+.why-us {
+  background-color: var(--color-warm-white);
+  padding-block: var(--space-6);
+}
+
+.why-us__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-block-start: var(--space-4);
+}
+
+.benefit {
+  text-align: center;
+  padding-block: var(--space-2);
+}
+
+.benefit__icon-wrap {
+  width: 56px;
+  height: 56px;
+  background-color: var(--color-light-coral-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  margin-block-end: var(--space-2);
+}
+
+.benefit__icon {
+  color: var(--color-coral);
+  flex-shrink: 0;
+}
+
+.benefit__heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-navy);
+  margin-block-end: 8px;
+}
+
+.benefit__body {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-dark-text);
+  max-width: 280px;
+  margin-inline: auto;
+}
+
+/* =============================================================================
+   15. Testimonials Section
+============================================================================= */
+.testimonials {
+  background-color: var(--color-light-teal-bg);
+  padding-block: var(--space-6);
+}
+
+/* Mobile: horizontal scroll carousel */
+.testimonials__track {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline-start: var(--space-3);
+  /* Hide scrollbar visually but keep functionality */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-inline: calc(-1 * var(--space-3));
+  padding-inline: var(--space-3);
+  padding-block-end: var(--space-1);
+  margin-block-start: var(--space-4);
+}
+
+.testimonials__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  flex: 0 0 calc(100% - 20px); /* Show a peek of next card */
+  scroll-snap-align: start;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-hover), box-shadow var(--transition-hover);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.testimonial-card__quote-mark {
+  display: block;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--color-coral);
+  margin-block-end: 8px;
+}
+
+.testimonial-card__text {
+  font-size: 15px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+  font-style: italic;
+  margin-block-end: 20px;
+  flex: 1;
+}
+
+.testimonial-card__attribution {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-block-start: auto;
+}
+
+.testimonial-card__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--color-light-coral-bg);
+  border: 1px solid var(--color-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-coral);
+}
+
+.testimonial-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.testimonial-card__name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-navy);
+  display: block;
+}
+
+.testimonial-card__context {
+  font-size: 13px;
+  color: var(--color-gray-text);
+  display: block;
+}
+
+/* Carousel dot indicators (mobile) */
+.testimonials__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-block-start: var(--space-3);
+}
+
+.testimonials__dot {
+  /* 48px touch target for mobile accessibility */
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  min-height: unset;
+  transition: opacity var(--transition-hover);
+}
+
+/* Visual 8px dot drawn with a pseudo-element */
+.testimonials__dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-light-gray);
+  transition: background-color var(--transition-hover);
+}
+
+.testimonials__dot--active::after {
+  background-color: var(--color-coral);
+}
+
+/* Gray text on Light Teal BG — darken to meet WCAG AA 4.5:1 */
+.testimonials .section-intro {
+  color: #4B5563;
+}
+
+.testimonials .testimonial-card__context {
+  color: #4B5563;
+}
+
+/* =============================================================================
+   16. About Teaser Section
+============================================================================= */
+.about-teaser {
+  background-color: var(--color-warm-white);
+  padding-block: var(--space-6);
+}
+
+.about-teaser__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.about-teaser__photo-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.about-teaser__brush-accent {
+  position: absolute;
+  inset-block-end: -10px;
+  inset-inline-start: -8px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-yellow);
+  border-radius: 50% 10% 50% 10%;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@media (max-width: 374px) {
+  .about-teaser__brush-accent {
+    display: none;
+  }
+}
+
+.about-teaser__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.about-teaser__body {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+}
+
+/* =============================================================================
+   17. Final CTA Section
+============================================================================= */
+.cta-final {
+  background-color: var(--color-navy);
+  padding-block: var(--space-8);
+  /* Subtle dot pattern via radial gradient */
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+.cta-final__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 700px;
+  margin-inline: auto;
+}
+
+.cta-final__heading {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  color: var(--color-white);
+  margin-block-end: var(--space-2);
+}
+
+.cta-final__body {
+  margin-block-end: var(--space-5);
+}
+
+.cta-final__body p {
+  font-size: 17px;
+  line-height: 28px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cta-final__emphasis {
+  font-weight: 600;
+  color: var(--color-white) !important;
+  margin-block-start: 4px;
+}
+
+.cta-final__buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.cta-final__buttons .btn {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* =============================================================================
+   18. Footer
+============================================================================= */
+.footer {
+  background-color: var(--color-navy);
+}
+
+.footer__divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.12);
+  margin-inline: var(--space-3);
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-block-start: var(--space-6);
+}
+
+/* On mobile: reorder columns (Logo, Contact, Quick links, Services) */
+.footer__col--brand   { order: 1; }
+.footer__col--contact { order: 2; }
+.footer__col--links   { order: 3; }
+.footer__col--services { order: 4; }
+
+.footer__logo-placeholder {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--color-white);
+  display: inline-block;
+}
+
+.footer__tagline {
+  font-size: 14px;
+  line-height: 22px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-block-start: 12px;
+}
+
+.footer__social {
+  display: flex;
+  gap: 16px;
+  margin-block-start: 20px;
+}
+
+.footer__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  border-radius: var(--radius-button);
+  transition: color var(--transition-hover), background-color var(--transition-hover);
+}
+
+.footer__social-link:hover {
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.footer__col-heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-white);
+  margin-block-end: var(--space-2);
+  text-transform: none;
+}
+
+.footer__links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer__link {
+  font-size: 14px;
+  line-height: 26px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color var(--transition-hover);
+}
+
+.footer__link:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+.footer__contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer__contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 26px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__contact-item svg {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__tel-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color var(--transition-hover);
+}
+
+.footer__tel-link:hover {
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+.footer__whatsapp-link {
+  color: var(--color-whatsapp);
+  text-decoration: none;
+  transition: opacity var(--transition-hover);
+}
+
+.footer__whatsapp-link:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+/* Footer bottom bar */
+.footer__bottom {
+  border-block-start: 1px solid rgba(255, 255, 255, 0.12);
+  margin-block-start: var(--space-6);
+  padding-block: var(--space-3);
+}
+
+.footer__bottom-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.footer__copyright,
+.footer__rights {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* =============================================================================
+   19. WhatsApp Floating Button
+============================================================================= */
+.whatsapp-float {
+  position: fixed;
+  inset-block-end: 24px;
+  inset-inline-end: 24px; /* RTL: reading-end corner (logical property) */
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-whatsapp);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-hover),
+    box-shadow var(--transition-hover),
+    transform var(--transition-hover);
+  animation: pulse-whatsapp 1.5s ease-out 3;
+}
+
+.whatsapp-float:hover {
+  background-color: var(--color-whatsapp-dark);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+.whatsapp-float__tooltip {
+  position: absolute;
+  inset-inline-end: calc(100% + 12px); /* RTL: tooltip appears to the right of button */
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  background-color: var(--color-navy);
+  color: var(--color-white);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-hover), visibility var(--transition-hover);
+}
+
+.whatsapp-float:hover .whatsapp-float__tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+@keyframes pulse-whatsapp {
+  0%   { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10), 0 0 0 0 rgba(18, 140, 126, 0.4); }
+  70%  { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10), 0 0 0 12px rgba(18, 140, 126, 0); }
+  100% { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10), 0 0 0 0 rgba(18, 140, 126, 0); }
+}
+
+/* =============================================================================
+   20. Tablet Breakpoint — >= 768px
+============================================================================= */
+@media (min-width: 768px) {
+
+  .container {
+    padding-inline: var(--space-5); /* 40px */
+  }
+
+  /* Typography */
+  .section-heading {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .section-intro {
+    margin-block-end: 48px;
+  }
+
+  /* Navbar */
+  .navbar__inner {
+    height: 72px;
+  }
+
+  /* Hero */
+  .hero {
+    padding-block: var(--space-8);
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+    padding-block-end: calc(var(--space-10) + 40px);
+  }
+
+  .hero__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .hero__text {
+    flex: 0 0 55%;
+  }
+
+  .hero__heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .hero__subheadline p {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .hero__ctas {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .hero__image-wrap {
+    flex: 1;
+    margin-block-start: 0;
+  }
+
+  .placeholder-img--hero {
+    height: 360px;
+    margin-block-start: 0;
+  }
+
+  /* Services */
+  .services {
+    padding-block: var(--space-8);
+  }
+
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  /* Why ArtyParty */
+  .why-us {
+    padding-block: var(--space-8);
+  }
+
+  .why-us__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Testimonials */
+  .testimonials {
+    padding-block: var(--space-8);
+  }
+
+  .testimonials__track {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: unset;
+    scroll-snap-type: unset;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .testimonial-card {
+    flex: unset;
+    scroll-snap-align: unset;
+  }
+
+  /* All three testimonial cards remain visible at tablet */
+
+  .testimonials__dots {
+    display: none;
+  }
+
+  /* About Teaser */
+  .about-teaser {
+    padding-block: var(--space-8);
+  }
+
+  .about-teaser__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .about-teaser__photo-wrap {
+    flex: 0 0 40%;
+  }
+
+  .about-teaser__text {
+    flex: 1;
+  }
+
+  .placeholder-img--about {
+    height: 320px;
+  }
+
+  /* Final CTA */
+  .cta-final {
+    padding-block: var(--space-8);
+  }
+
+  .cta-final__heading {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .cta-final__buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .cta-final__buttons .btn {
+    width: auto;
+    max-width: none;
+  }
+
+  /* Footer */
+  .footer__inner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Restore mobile reorder on tablet */
+  .footer__col--brand   { order: unset; grid-column: 1; }
+  .footer__col--links   { order: unset; }
+  .footer__col--services { order: unset; }
+  .footer__col--contact { order: unset; }
+
+  .footer__bottom-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: start;
+  }
+}
+
+/* =============================================================================
+   21. Desktop Breakpoint — >= 1024px
+============================================================================= */
+@media (min-width: 1024px) {
+
+  /* Navbar: show desktop nav, hide hamburger */
+  .navbar__nav {
+    display: flex;
+  }
+
+  .navbar__hamburger {
+    display: none;
+  }
+
+  /* Show desktop CTA button in navbar */
+  .navbar .btn--navbar-cta {
+    display: inline-flex;
+  }
+
+  /* Hero */
+  .hero {
+    padding-block-start: var(--space-10);
+  }
+
+  .hero__heading {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .hero__subheadline p {
+    font-size: 18px;
+  }
+
+  .hero__image-wrap {
+    flex: 0 0 45%;
+  }
+
+  .placeholder-img--hero {
+    height: 440px;
+  }
+
+  /* Services */
+  .services__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .card__heading {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  /* Why ArtyParty */
+  .why-us__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+
+  .benefit__heading {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  /* Testimonials: show all 3 */
+  .testimonials__track {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .testimonial-card:nth-child(3) {
+    display: flex;
+  }
+
+  /* About Teaser */
+  .about-teaser__inner {
+    gap: var(--space-8);
+  }
+
+  .about-teaser__photo-wrap {
+    flex: 0 0 40%;
+  }
+
+  .placeholder-img--about {
+    height: 400px;
+    max-height: 400px;
+  }
+
+  /* Final CTA */
+  .cta-final {
+    padding-block: var(--space-10);
+  }
+
+  .cta-final__heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  /* Footer: 4 columns */
+  .footer__inner {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-8);
+    padding-block-start: var(--space-8);
+  }
+}
+
+/* =============================================================================
+   22. Large Desktop — >= 1440px
+============================================================================= */
+@media (min-width: 1440px) {
+  /* Content container maxes at 1200px — no layout changes needed */
+}
+
+/* =============================================================================
+   23. Reduced Motion Preference
+============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .fade-in-up {
+    opacity: 1;
+    transform: none;
+  }
+
+  .whatsapp-float {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* =============================================================================
+   24. Utility — Visually Hidden (for screen readers)
+============================================================================= */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =============================================================================
+   25. Service Card — Real Photo Image
+============================================================================= */
+.card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  border-radius: var(--radius-image) var(--radius-image) 0 0;
+}
+
+/* =============================================================================
+   26. About Teaser — Real Photo
+   M5: Use aspect-ratio instead of fixed height for better responsiveness.
+============================================================================= */
+.about-teaser__photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: var(--radius-image);
+  display: block;
+  background-color: var(--color-light-teal-bg);
+}
+
+/* =============================================================================
+   27. Hero Split Layout
+   Replaces the old hero-slideshow. Text panel (55%) right, image panel (45%) left.
+   RTL-native: text on reading-start (right) side, image on reading-end (left) side.
+============================================================================= */
+
+/* Coral accent bar — 4px stripe at very top of hero */
+.hero-split__accent-bar {
+  height: 4px;
+  background-color: var(--color-coral);
+  width: 100%;
+}
+
+.hero-split {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-split__inner {
+  display: flex;
+  flex-direction: column; /* mobile: stacked */
+  align-items: stretch;
+  padding: 20px 16px 0; /* top: breathing room from accent bar; sides: so image doesn't touch edges */
+  gap: 0; /* no gap between text and image panels on mobile */
+}
+
+/* --- TEXT PANEL --- */
+.hero-split__text {
+  flex: 0 0 100%;
+  background-color: #FFFBF8;
+  padding: 32px 24px 40px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-split__heading {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+  color: #2C3E6B;
+  margin: 0;
+}
+
+.hero-split__subheadline {
+  font-size: 16px;
+  line-height: 26px;
+  color: #2D2D2D;
+  margin-block-start: 16px;
+  margin-block-end: 0;
+}
+
+.hero-split__emphasis {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: #E86B5A;
+  margin-block-start: 8px;
+  margin-block-end: 0;
+}
+
+.hero-split__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-start: 32px;
+}
+
+.hero-split__ctas .btn--whatsapp {
+  width: 100%;
+}
+
+.hero-split__scroll-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #2BA5A5;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  align-self: center;
+}
+
+.hero-split__scroll-link:hover {
+  text-decoration: underline;
+}
+
+.hero-split__scroll-icon {
+  flex-shrink: 0;
+}
+
+/* --- IMAGE PANEL --- */
+.hero-split__image {
+  flex: 1 1 auto; /* fill available space, no fixed 100% basis that fights padding */
+  background-color: #FFF0ED;
+  overflow: hidden; /* clips images to rounded corners */
+  position: relative;
+  aspect-ratio: 4 / 3; /* mobile: landscape ratio */
+  /* Mobile: image panel placed ABOVE text */
+  order: -1; /* image panel on top on mobile */
+  border-radius: 20px;
+}
+
+/* Individual slide — absolutely stacked inside image panel */
+.hero-split__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 600ms ease-in-out;
+  z-index: 0;
+}
+
+.hero-split__slide--active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Image fills the panel — cover ensures image fills rounded frame with no background gaps */
+.hero-split__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+/* --- ARROW BUTTONS (hidden on mobile/tablet, visible on desktop) --- */
+.hero-split__arrow {
+  display: none; /* hidden by default; shown at 1024px+ */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.80);
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  color: #2C3E6B;
+  transition: background-color var(--transition-hover), box-shadow var(--transition-hover);
+}
+
+.hero-split__arrow:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.hero-split__arrow:focus-visible {
+  outline: 2px solid #2BA5A5;
+  outline-offset: 2px;
+}
+
+/* RTL: prev arrow = right side (inline-start), next arrow = left side (inline-end) */
+.hero-split__arrow--prev {
+  inset-inline-start: 16px;
+}
+
+.hero-split__arrow--next {
+  inset-inline-end: 16px;
+}
+
+/* Reduced motion — disable transitions and auto-rotation */
+@media (prefers-reduced-motion: reduce) {
+  .hero-split__slide {
+    transition: none;
+  }
+}
+
+/* =============================================================================
+   28. Lightbox Modal
+============================================================================= */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lightbox--open {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+}
+
+.lightbox__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 48px 16px 64px;
+}
+
+.lightbox__image-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100% - 120px);
+  max-height: 80vh;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+/* Close button */
+.lightbox__close {
+  position: absolute;
+  inset-block-start: 12px;
+  inset-inline-end: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-hover);
+  z-index: 2;
+}
+
+.lightbox__close:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Navigation arrows */
+.lightbox__nav {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color var(--transition-hover);
+  z-index: 2;
+}
+
+.lightbox__nav:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Counter */
+.lightbox__counter {
+  position: absolute;
+  inset-block-end: 16px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-family: var(--font-primary);
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* =============================================================================
+   29. Inner Page Hero (shared pattern for service pages)
+============================================================================= */
+.page-hero {
+  padding-block: var(--space-8);
+  background-color: var(--color-light-coral-bg);
+}
+
+.page-hero--teal {
+  background-color: var(--color-light-teal-bg);
+}
+
+.page-hero--warm {
+  background-color: var(--color-warm-white);
+}
+
+.page-hero__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.page-hero__text {
+  max-width: 680px;
+}
+
+.page-hero__heading {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 36px;
+  color: var(--color-navy);
+  margin-block-end: var(--space-2);
+}
+
+.page-hero__subheadline {
+  font-size: 17px;
+  line-height: 28px;
+  color: var(--color-dark-text);
+  margin-block-end: var(--space-4);
+}
+
+.page-hero__subheadline strong {
+  color: var(--color-navy);
+  font-weight: 600;
+}
+
+.page-hero__image {
+  width: 100%;
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+}
+
+.page-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  border-radius: var(--radius-image);
+}
+
+.page-hero__img--landscape {
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* =============================================================================
+   30. Workshop / Class Cards with Gallery Trigger
+============================================================================= */
+.workshop-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-block-start: var(--space-5);
+}
+
+.workshop-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform var(--transition-hover), box-shadow var(--transition-hover);
+  display: flex;
+  flex-direction: column;
+}
+
+.workshop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+.workshop-card__image-wrap {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 3 / 4;
+  background-color: var(--color-light-coral-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workshop-card__image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background var(--transition-hover);
+}
+
+.workshop-card__image-wrap:hover::after {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.workshop-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  transition: transform 400ms ease;
+}
+
+.workshop-card__image-wrap:hover .workshop-card__img {
+  transform: scale(1.03);
+}
+
+.workshop-card__gallery-hint {
+  position: absolute;
+  inset-block-end: 12px;
+  inset-inline-start: 12px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--color-white);
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.workshop-card__accent {
+  height: 4px;
+  background-color: var(--color-coral);
+  width: 100%;
+}
+
+.workshop-card__accent--teal {
+  background-color: var(--color-teal);
+}
+
+.workshop-card__content {
+  padding: 20px 24px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.workshop-card__heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--color-navy);
+  margin-block-end: 10px;
+}
+
+.workshop-card__body {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+  flex: 1;
+  margin-block-end: 20px;
+}
+
+.workshop-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-coral);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-primary);
+  padding: 0;
+  transition: opacity var(--transition-hover), text-decoration var(--transition-hover);
+  align-self: flex-start;
+}
+
+.workshop-card__cta:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* =============================================================================
+   31. What's Included — Icon List
+============================================================================= */
+.included-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-block-start: var(--space-3);
+}
+
+.included-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+}
+
+.included-list__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-light-coral-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: 1px;
+}
+
+.included-list__icon svg {
+  color: var(--color-coral);
+}
+
+/* =============================================================================
+   32. How It Works — Steps
+============================================================================= */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+  position: relative;
+}
+
+.step {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.step__number {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-coral-btn);
+  color: var(--color-white);
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step__content {
+  padding-block-start: 8px;
+}
+
+.step__heading {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--color-navy);
+  margin-block-end: 4px;
+}
+
+.step__body {
+  font-size: 15px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+}
+
+/* =============================================================================
+   33. Benefits Grid (for service pages)
+============================================================================= */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-block-start: var(--space-5);
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* =============================================================================
+   34. Practical Info Section
+============================================================================= */
+.info-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+}
+
+.info-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-list__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-dark-text);
+}
+
+.info-list__label {
+  font-weight: 600;
+  color: var(--color-navy);
+  flex-shrink: 0;
+  min-width: 100px;
+}
+
+.info-note {
+  margin-block-start: var(--space-3);
+  font-size: 14px;
+  color: var(--color-gray-text);
+  font-style: italic;
+}
+
+.placeholder-text {
+  color: var(--color-gray-text);
+  font-style: italic;
+}
+
+/* =============================================================================
+   35. Gallery Grid (for camps and studio pages)
+============================================================================= */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-block-start: var(--space-4);
+}
+
+.gallery-item {
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background-color: var(--color-light-coral-bg);
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-grid--fundays .gallery-item {
+  background-color: var(--color-light-teal-bg);
+}
+
+.gallery-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background var(--transition-hover);
+}
+
+.gallery-item:hover::after {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  transition: transform 400ms ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+/* =============================================================================
+   36. Contact Methods Grid
+============================================================================= */
+.contact-methods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-block-start: var(--space-4);
+}
+
+.contact-method {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.contact-method__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: var(--color-light-coral-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-coral);
+}
+
+.contact-method__icon--whatsapp {
+  background-color: #e6f7f5;
+  color: var(--color-whatsapp);
+}
+
+.contact-method__icon--social {
+  background-color: var(--color-light-teal-bg);
+  color: var(--color-teal);
+}
+
+.contact-method__body {
+  flex: 1;
+}
+
+.contact-method__label {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-navy);
+  display: block;
+  margin-block-end: 2px;
+}
+
+.contact-method__desc {
+  font-size: 14px;
+  color: var(--color-gray-text);
+  display: block;
+}
+
+.contact-method__action {
+  display: inline-flex;
+  align-items: center;
+  margin-block-start: 8px;
+}
+
+/* =============================================================================
+   37. Contact Form
+============================================================================= */
+.contact-form-wrap {
+  max-width: 580px;
+  margin-inline: auto;
+}
+
+.contact-form {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5);
+}
+
+.form-field {
+  margin-block-end: var(--space-3);
+}
+
+.form-field label {
+  display: block;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--color-navy);
+  margin-block-end: 6px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  font-family: var(--font-primary);
+  font-size: 15px;
+  color: var(--color-dark-text);
+  background-color: var(--color-warm-white);
+  border: 1.5px solid var(--color-light-gray);
+  border-radius: var(--radius-input);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color var(--transition-hover), box-shadow var(--transition-hover);
+  direction: rtl;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgba(43, 165, 165, 0.15);
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-field--error input,
+.form-field--error select,
+.form-field--error textarea {
+  border-color: var(--color-coral);
+}
+
+.form-submit-btn {
+  width: 100%;
+  min-height: 52px;
+  font-size: 17px;
+  font-weight: 600;
+  margin-block-start: var(--space-2);
+}
+
+.form-error-banner {
+  background-color: #ffeaea;
+  color: #b00020;
+  font-size: 14px;
+  border-radius: var(--radius-input);
+  padding: 10px 16px;
+  margin-block-end: var(--space-2);
+  border-inline-start: 3px solid #b00020;
+}
+
+.form-success {
+  background-color: var(--color-light-teal-bg);
+  border: 1.5px solid var(--color-teal);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  text-align: center;
+}
+
+.form-success__text {
+  font-size: 17px;
+  line-height: 28px;
+  color: var(--color-navy);
+  font-weight: 500;
+}
+
+/* =============================================================================
+   38. About Page — Two-column story layout
+============================================================================= */
+.story-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-block-start: var(--space-4);
+}
+
+.story-layout__text {
+  max-width: 680px;
+}
+
+.story-layout__text p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--color-dark-text);
+  margin-block-end: var(--space-3);
+}
+
+.story-photo {
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  aspect-ratio: 3 / 4;
+}
+
+.story-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  background-color: var(--color-light-teal-bg);
+}
+
+/* =============================================================================
+   39. Studio Callout Banner (About page → Studio link)
+============================================================================= */
+.studio-callout {
+  background-color: var(--color-light-coral-bg);
+  border-radius: var(--radius-card);
+  border-inline-start: 4px solid var(--color-coral);
+  padding: var(--space-3) var(--space-4);
+  margin-block: var(--space-6);
+}
+
+.studio-callout p {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+}
+
+.studio-callout a {
+  color: var(--color-coral);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   40. Active Navbar Link State
+============================================================================= */
+.navbar__nav-link--active {
+  color: var(--color-coral);
+}
+
+.navbar__nav-link--active::after {
+  width: 100%;
+}
+
+.mobile-menu__link--active {
+  color: var(--color-coral);
+  background-color: var(--color-light-coral-bg);
+}
+
+/* =============================================================================
+   41. Page Section — reusable section wrappers
+============================================================================= */
+.section {
+  padding-block: var(--space-6);
+}
+
+.section--coral {
+  background-color: var(--color-light-coral-bg);
+}
+
+.section--teal {
+  background-color: var(--color-light-teal-bg);
+}
+
+.section--warm {
+  background-color: var(--color-warm-white);
+}
+
+.section--white {
+  background-color: var(--color-white);
+}
+
+.section-intro-text {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-gray-text);
+  text-align: center;
+  margin-block-start: 8px;
+  margin-block-end: 32px; /* M1: was var(--space-2) / 16px — increased for breathing room */
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+/* =============================================================================
+   42. Final CTA — Service page variant (coral bg)
+============================================================================= */
+.cta-final--coral {
+  background-color: var(--color-coral-btn);
+}
+
+.cta-final__secondary-contact {
+  margin-block-start: 12px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cta-final__secondary-contact a {
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+/* =============================================================================
+   43. Tablet & Desktop responsive additions for new components
+============================================================================= */
+@media (min-width: 768px) {
+  /* Page Hero */
+  .page-hero {
+    padding-block: var(--space-10);
+  }
+
+  .page-hero__inner {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .page-hero__text {
+    flex: 0 0 55%;
+  }
+
+  .page-hero__image {
+    flex: 1;
+    aspect-ratio: unset;
+    height: 100%;
+    align-self: stretch;
+  }
+
+  .page-hero__image img {
+    height: 100%;
+  }
+
+  .page-hero__heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  /* Workshop cards: 3 columns on tablet+ */
+  .workshop-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Steps horizontal */
+  .steps--horizontal {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .steps--horizontal .step {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+  }
+
+  /* Benefits grid: 2 cols */
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Gallery grid: 3 cols on tablet */
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Contact methods: 2 cols */
+  .contact-methods {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Story layout: row on tablet */
+  .story-layout--side {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .story-layout--side .story-photo {
+    flex: 0 0 35%;
+  }
+
+  .story-layout--side .story-layout__text {
+    flex: 1;
+  }
+
+  /* Hero split — tablet: side-by-side, image right (RTL), text left */
+  .hero-split__inner {
+    flex-direction: row;
+    min-height: 520px;
+    padding: 24px; /* uniform padding — creates breathing room on all sides */
+    gap: 24px; /* gap between text and image panels */
+  }
+
+  .hero-split__text {
+    flex: 0 0 52%;
+    order: 0; /* reset mobile order */
+    padding: 48px 40px 48px 32px;
+  }
+
+  .hero-split__image {
+    flex: 1; /* fill remaining space after text panel */
+    order: 0; /* reset mobile order */
+    height: auto;
+    max-height: none;
+    aspect-ratio: unset;
+    align-self: stretch;
+    min-height: 400px; /* ensure image panel has enough height on tablet */
+  }
+
+  .hero-split__heading {
+    font-size: 36px;
+    line-height: 44px;
+  }
+
+  .hero-split__subheadline {
+    font-size: 17px;
+    line-height: 27px;
+  }
+
+  .hero-split__ctas .btn--whatsapp {
+    width: auto;
+  }
+
+  .hero-split__scroll-link {
+    align-self: flex-start;
+  }
+
+}
+
+@media (min-width: 1024px) {
+  /* Page hero heading larger */
+  .page-hero__heading {
+    font-size: 40px;
+    line-height: 50px;
+  }
+
+  /* Workshop cards: 3 columns on desktop */
+  .workshop-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Benefits grid: 4 cols on desktop */
+  .benefits-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Hero split — desktop: taller, wider text panel, arrows visible */
+  .hero-split__inner {
+    min-height: 580px;
+    padding: 32px;
+    gap: 32px;
+  }
+
+  .hero-split__text {
+    flex: 0 0 55%;
+    padding: 64px 64px 64px 48px;
+  }
+
+  .hero-split__image {
+    flex: 1; /* fill remaining space */
+  }
+
+  .hero-split__heading {
+    font-size: 44px;
+    line-height: 54px;
+  }
+
+  .hero-split__subheadline {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  /* Show arrows on desktop */
+  .hero-split__arrow {
+    display: flex;
+  }
+
+  /* About teaser photo: aspect-ratio set in section 26, no height override needed */
+}
+
+@media (min-width: 1440px) {
+  .hero-split__inner {
+    min-height: 620px;
+  }
+}
+
+/* =============================================================================
+   44. About Page — Story photo float layout
+============================================================================= */
+
+/*
+  Mobile: photos stack above text, full-width.
+  Desktop (via story-layout--side): photo and text sit side by side.
+  The existing .story-layout--side rules in section 43 handle the row layout.
+  These rules add the photo sizing and the reverse-order variant.
+*/
+
+/* Constrain founder photos to a sensible max-width and give them a rounded look */
+.about-story__photo-float {
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  flex-shrink: 0;
+  aspect-ratio: 3 / 4;
+}
+
+.about-story__photo-float img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  background-color: var(--color-light-teal-bg);
+}
+
+/* Closing paragraph block — adds spacing before second story row */
+.about-story__closing {
+  margin-block-start: var(--space-5);
+}
+
+/* Reverse layout: on desktop, flip so photo is on the left (inline-start in LTR,
+   inline-end in RTL) relative to the text — creates visual variety */
+.story-layout--reverse {
+  flex-direction: column; /* stays column on mobile */
+}
+
+@media (min-width: 768px) {
+  .about-story__photo-float img {
+    height: 340px;
+  }
+
+  /* Side layout: photo at 38% width, text fills the rest */
+  .story-layout--side .about-story__photo-float {
+    flex: 0 0 38%;
+  }
+
+  .story-layout--side .story-layout__text {
+    flex: 1;
+  }
+
+  /* Reverse order: row-reverse so the second photo appears on opposite side */
+  .story-layout--reverse.story-layout--side {
+    flex-direction: row-reverse;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-story__photo-float img {
+    height: 400px;
+  }
+}
+
+/* =============================================================================
+   45. Contact Page — Contact Cards Grid
+============================================================================= */
+
+/*
+  4 cards arranged in a 2×2 grid on tablet+, single column on mobile.
+  Each card has a centered icon, heading, description, and action button.
+*/
+
+.contact-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-block-start: var(--space-5);
+}
+
+.contact-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-4);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform var(--transition-hover), box-shadow var(--transition-hover);
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Icon circle */
+.contact-card__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: var(--space-2);
+  flex-shrink: 0;
+  /* Default: coral theme */
+  background-color: var(--color-light-coral-bg);
+  color: var(--color-coral);
+}
+
+.contact-card__icon--whatsapp {
+  background-color: #e6f7f5;
+  color: var(--color-whatsapp);
+}
+
+.contact-card__icon--phone {
+  background-color: var(--color-light-coral-bg);
+  color: var(--color-coral);
+}
+
+.contact-card__icon--social {
+  background-color: var(--color-light-teal-bg);
+  color: var(--color-teal);
+}
+
+.contact-card__label {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-navy);
+  margin-block-end: 4px;
+}
+
+.contact-card__desc {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-gray-text);
+  margin-block-end: var(--space-2);
+  flex: 1;
+}
+
+.contact-card__action {
+  margin-block-start: auto;
+}
+
+/* Tablet+: 2-column grid */
+@media (min-width: 768px) {
+  .contact-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Keep 2×2 for contact cards — 4-col would make them too narrow */
+  .contact-cards-grid {
+    max-width: 760px;
+    margin-inline: auto;
+  }
+}
+
+/* =============================================================================
+   46. Studio Gallery Grid — masonry columns that adapt to natural image ratios
+============================================================================= */
+
+/* Override the fixed grid with CSS columns (masonry-style).
+   Each photo sits in its own frame, sized by its natural aspect ratio.
+   Images are NOT forced into a uniform height — portrait stays portrait,
+   landscape stays landscape. */
+.gallery-grid--studio {
+  display: block; /* Exit the grid context — use CSS columns instead */
+  columns: 2;
+  column-gap: 16px;
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+/* Each gallery item: natural size, rounded frame, no fixed aspect-ratio */
+.gallery-grid--studio .gallery-item {
+  aspect-ratio: unset;      /* Remove the forced 3/4 portrait ratio */
+  height: auto;
+  display: block;
+  break-inside: avoid;      /* Prevent items from splitting across columns */
+  margin-block-end: 16px;   /* Gap between rows */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background-color: #FFFBF8;
+}
+
+/* Images fill their container at natural proportions */
+.gallery-grid--studio .gallery-item img {
+  width: 100%;
+  height: auto;             /* Natural height — no cropping */
+  object-fit: unset;
+  display: block;
+  border-radius: 0;         /* Container already has radius */
+}
+
+/* Remove the centered-half special case — masonry handles layout naturally */
+.gallery-item--centered-half {
+  grid-column: auto;
+  max-width: 100%;
+  margin-inline: 0;
+}
+
+@media (min-width: 768px) {
+  .gallery-grid--studio {
+    columns: 2;
+    column-gap: 20px;
+  }
+  .gallery-grid--studio .gallery-item {
+    margin-block-end: 20px;
+  }
+}
+
+/* =============================================================================
+   47. Responsive Section Padding (H6) — was 46, renumbered
+   Scale .section padding-block at tablet and desktop breakpoints.
+============================================================================= */
+@media (min-width: 768px) {
+  .section {
+    padding-block: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-10);
+  }
+}
+
+/* =============================================================================
+   47. Section Intro Text — responsive bottom margin (M1)
+============================================================================= */
+@media (min-width: 768px) {
+  .section-intro-text {
+    margin-block-end: 48px;
+  }
+}
+
+/* =============================================================================
+   48. Workshop Card CTA — underline by default (M3)
+   Hover thickness updated in section 30 .workshop-card__cta:hover rule.
+============================================================================= */
+.workshop-card__cta {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* =============================================================================
+   49. Gallery Item — portrait aspect-ratio on container (updated for portrait photos)
+============================================================================= */
+/* aspect-ratio and object-fit now set on .gallery-item and .gallery-item img
+   in section 35. No responsive height overrides needed. */
+
+/* Section 50 merged into section 26 (about-teaser__photo) */
+
+/* =============================================================================
+   51. Contact Hero — centered variant class (M6)
+   Inherits .page-hero padding; only overrides text alignment and max-width.
+============================================================================= */
+.page-hero--centered .page-hero__text {
+  max-width: 600px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.page-hero--centered .page-hero__heading {
+  text-align: center;
+}
+
+.page-hero--centered .page-hero__subheadline {
+  text-align: center;
+}
+
+/* =============================================================================
+   52. Section Heading with Gap (M8)
+============================================================================= */
+.section-heading--with-gap {
+  margin-block-end: var(--space-5);
+}
+
+/* =============================================================================
+   53. Prose Block — reusable rich text container (H2)
+============================================================================= */
+.prose {
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+.prose p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--color-dark-text);
+  margin-block-end: 20px;
+}
+
+.prose p:last-child {
+  margin-block-end: 0;
+}
+
+/* =============================================================================
+   54. Content Narrow — centered narrow text block (H2)
+============================================================================= */
+.content-narrow {
+  max-width: 560px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* =============================================================================
+   55. Location block helpers — studio and contact pages (H2)
+============================================================================= */
+.location-icon-wrap {
+  margin-block-end: 20px;
+}
+
+/* White background variant for icon on colored section backgrounds */
+.benefit__icon-wrap--white {
+  background-color: var(--color-white);
+}
+
+/* Adds spacing between prose block and placeholder text below it */
+.location-prose {
+  margin-block-end: 16px;
+}
+
+.location-address-placeholder {
+  font-size: 14px;
+  margin-block-end: 28px;
+}
+
+/* =============================================================================
+   56. Narrow Steps and Info Card variants (H2 — replaces inline styles)
+============================================================================= */
+.steps--narrow {
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.info-card--narrow {
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+/* =============================================================================
+   57. Fun Days Page — B2B Corporate Page Styles
+============================================================================= */
+
+/* Centered prose block (problem / solution sections) */
+.prose--centered {
+  max-width: 680px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.fundays-problem,
+.fundays-solution {
+  text-align: center;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.fundays-solution__highlight {
+  margin-block-start: 12px;
+  font-size: 18px;
+  color: var(--color-navy);
+}
+
+/* Checklist — coral icon checkmarks */
+.fundays-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-block-start: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.fundays-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-dark-text);
+}
+
+.fundays-checklist__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-coral-btn);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-start: -2px;
+}
+
+/* Compact variant — smaller icon, tighter spacing */
+.fundays-checklist--compact .fundays-checklist__item {
+  font-size: 15px;
+}
+
+.fundays-checklist--compact .fundays-checklist__icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Customization two-column layout on desktop */
+.fundays-customize {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.fundays-customize__intro {
+  max-width: 100%;
+}
+
+.fundays-customize__body {
+  font-size: 17px;
+  line-height: 28px;
+  color: var(--color-dark-text);
+  margin-block-start: var(--space-2);
+}
+
+/* Benefits grid: 2 columns */
+.benefits-grid--2 {
+  grid-template-columns: 1fr;
+}
+
+/* Benefits grid: 3 columns */
+.benefits-grid--3 {
+  grid-template-columns: 1fr;
+}
+
+/* Teal accent variant for benefit cards */
+.benefit--teal .benefit__icon-wrap {
+  background-color: var(--color-light-teal-bg);
+}
+
+.benefit--teal .benefit__icon {
+  color: var(--color-teal);
+}
+
+/* Icon wrap teal modifier */
+.benefit__icon-wrap--teal {
+  background-color: var(--color-light-teal-bg);
+}
+
+/* Responsive: 2 cols on tablet */
+@media (min-width: 768px) {
+  .benefits-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefits-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .fundays-customize {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-8);
+  }
+
+  .fundays-customize__intro {
+    flex: 0 0 40%;
+  }
+
+  .fundays-checklist--compact {
+    flex: 1;
+    margin-block-start: 0;
+  }
+}
+
+/* =============================================================================
+   58. Mobile Responsiveness Fixes
+   Resolves 25 issues from mobile audit (April 2026).
+   XS = max-width: 479px (small phones, 375–479px)
+   SM = min-width: 480px AND max-width: 767px (large phones)
+   See: website/docs/mobile-design-spec.md
+============================================================================= */
+
+/* --- Active touch feedback (global) --- */
+.btn:active,
+a.btn:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+a:active:not(.btn):not(.navbar__nav-link):not(.footer__link) {
+  opacity: 0.7;
+}
+
+/* --- Footer social links: enlarge touch target --- */
+.footer__social-link {
+  width: 44px;
+  height: 44px;
+}
+
+/* --- WhatsApp float + Final CTA clearance (all mobile) --- */
+@media (max-width: 767px) {
+  .whatsapp-float {
+    inset-block-end: 90px;
+  }
+  .cta-final {
+    padding-block-end: calc(var(--space-10) + 24px); /* 104px */
+  }
+}
+
+/* ======================================================
+   XS BREAKPOINT — max-width: 479px
+====================================================== */
+@media (max-width: 479px) {
+
+  /* ---- Container ---- */
+  .container {
+    padding-inline: var(--space-2); /* 16px each side */
+  }
+
+  /* ---- Section vertical padding ---- */
+  .section {
+    padding-block: var(--space-5); /* 40px */
+  }
+  .services,
+  .why-us,
+  .testimonials,
+  .about-teaser {
+    padding-block: var(--space-5);
+  }
+  .page-hero {
+    padding-block: var(--space-5);
+  }
+
+  /* ---- Section heading typography ---- */
+  .section-heading {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  /* ---- Navbar ---- */
+  .navbar__inner {
+    height: 56px;
+  }
+  .navbar__logo-img {
+    height: 44px;
+  }
+
+  /* ---- Mobile menu ---- */
+  .mobile-menu__link {
+    min-height: 56px;
+    font-size: 18px;
+    padding-inline: var(--space-3); /* 24px */
+  }
+
+  /* ---- Hero split ---- */
+  .hero-split__text {
+    padding: 24px 16px 32px 16px;
+  }
+  .hero-split__heading {
+    font-size: 26px;
+    line-height: 34px;
+  }
+  .hero-split__ctas .btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* ---- Services grid ---- */
+  .services__grid {
+    gap: var(--space-4); /* 32px */
+    margin-block-start: var(--space-3);
+  }
+
+  /* ---- Benefits ---- */
+  .benefit {
+    padding-block: var(--space-1); /* 8px */
+  }
+
+  /* ---- Testimonials ---- */
+  .testimonials__track {
+    margin-inline: calc(-1 * var(--space-2)); /* -16px */
+    padding-inline: var(--space-2);
+    scroll-padding-inline-start: var(--space-2);
+  }
+
+  /* ---- Page hero ---- */
+  .page-hero__heading {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  /* ---- Workshop cards ---- */
+  .workshop-card__content {
+    padding: 16px 20px 20px;
+  }
+
+  /* ---- Gallery lightbox ---- */
+  .lightbox__inner {
+    padding: 40px 8px 56px;
+  }
+  .lightbox__image-wrap {
+    max-width: calc(100% - 96px);
+  }
+
+  /* ---- Gallery grid ---- */
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2); /* 16px */
+  }
+  .gallery-grid--studio {
+    columns: 1;
+  }
+
+  /* ---- Contact form ---- */
+  .contact-form {
+    padding: var(--space-3); /* 24px */
+  }
+  .form-success {
+    padding: var(--space-3);
+  }
+
+  /* ---- Contact cards (mobile vertical) ---- */
+  .contact-card {
+    padding: var(--space-3);
+  }
+
+  /* ---- Info cards ---- */
+  .info-card {
+    padding: var(--space-3); /* 24px */
+  }
+
+  /* ---- Steps ---- */
+  .step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2); /* 16px */
+  }
+  .step__content {
+    padding-block-start: 0;
+  }
+
+  /* ---- Placeholder images ---- */
+  .placeholder-img--hero {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .placeholder-img--card {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .placeholder-img--about {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  /* ---- CTA final heading ---- */
+  .cta-final__heading {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+/* ======================================================
+   SM BREAKPOINT — 480px to 767px
+====================================================== */
+@media (min-width: 480px) and (max-width: 767px) {
+
+  .hero-split__heading {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  /* Gallery grid: 2 columns on large phones */
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2); /* 16px */
+  }
+}
