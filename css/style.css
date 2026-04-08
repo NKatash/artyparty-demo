@@ -830,149 +830,11 @@ button {
 }
 
 /* =============================================================================
-   15. Testimonials Section
+   15. Testimonials Section — Image Carousel
 ============================================================================= */
 .testimonials {
   background-color: var(--color-light-teal-bg);
   padding-block: var(--space-6);
-}
-
-/* Mobile: horizontal scroll carousel */
-.testimonials__track {
-  display: flex;
-  gap: var(--space-3);
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scroll-padding-inline-start: var(--space-3);
-  /* Hide scrollbar visually but keep functionality */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  margin-inline: calc(-1 * var(--space-3));
-  padding-inline: var(--space-3);
-  padding-block-end: var(--space-1);
-  margin-block-start: var(--space-4);
-}
-
-.testimonials__track::-webkit-scrollbar {
-  display: none;
-}
-
-/* Testimonial Card */
-.testimonial-card {
-  flex: 0 0 calc(100% - 20px); /* Show a peek of next card */
-  scroll-snap-align: start;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-  padding: 28px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  transition: transform var(--transition-hover), box-shadow var(--transition-hover);
-}
-
-.testimonial-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-.testimonial-card__quote-mark {
-  display: block;
-  font-family: var(--font-primary);
-  font-weight: 700;
-  font-size: 48px;
-  line-height: 1;
-  color: var(--color-coral);
-  margin-block-end: 8px;
-}
-
-.testimonial-card__text {
-  font-size: 15px;
-  line-height: 26px;
-  color: var(--color-dark-text);
-  font-style: italic;
-  margin-block-end: 20px;
-  flex: 1;
-}
-
-.testimonial-card__attribution {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-block-start: auto;
-}
-
-.testimonial-card__avatar {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background-color: var(--color-light-coral-bg);
-  border: 1px solid var(--color-light-gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-coral);
-}
-
-.testimonial-card__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.testimonial-card__name {
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--color-navy);
-  display: block;
-}
-
-.testimonial-card__context {
-  font-size: 13px;
-  color: var(--color-gray-text);
-  display: block;
-}
-
-/* Carousel dot indicators (mobile) */
-.testimonials__dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-block-start: var(--space-3);
-}
-
-.testimonials__dot {
-  /* 48px touch target for mobile accessibility */
-  position: relative;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  min-height: unset;
-  transition: opacity var(--transition-hover);
-}
-
-/* Visual 8px dot drawn with a pseudo-element */
-.testimonials__dot::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--color-light-gray);
-  transition: background-color var(--transition-hover);
-}
-
-.testimonials__dot--active::after {
-  background-color: var(--color-coral);
 }
 
 /* Gray text on Light Teal BG — darken to meet WCAG AA 4.5:1 */
@@ -980,8 +842,73 @@ button {
   color: #4B5563;
 }
 
-.testimonials .testimonial-card__context {
-  color: #4B5563;
+.testimonials-carousel {
+  position: relative;
+  margin-block-start: var(--space-4);
+}
+
+.testimonials-carousel__viewport {
+  overflow: hidden;
+}
+
+.testimonials-carousel__track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.testimonials-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.testimonials-carousel__slide img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  display: block;
+}
+
+.testimonials-carousel__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--color-light-gray);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-navy);
+  padding: 0;
+  min-height: unset;
+  transition: background var(--transition-hover), box-shadow var(--transition-hover), opacity var(--transition-hover);
+}
+
+.testimonials-carousel__arrow:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.testimonials-carousel__arrow:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+/* RTL: prev arrow = right side (inline-start), next arrow = left side (inline-end) */
+.testimonials-carousel__arrow--prev {
+  inset-inline-start: -8px;
+}
+
+.testimonials-carousel__arrow--next {
+  inset-inline-end: -8px;
 }
 
 /* =============================================================================
@@ -1401,24 +1328,16 @@ button {
     padding-block: var(--space-8);
   }
 
-  .testimonials__track {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: unset;
-    scroll-snap-type: unset;
-    margin-inline: 0;
-    padding-inline: 0;
+  .testimonials-carousel__slide {
+    flex: 0 0 calc(100% / 3);
   }
 
-  .testimonial-card {
-    flex: unset;
-    scroll-snap-align: unset;
+  .testimonials-carousel__arrow--prev {
+    inset-inline-start: -20px;
   }
 
-  /* All three testimonial cards remain visible at tablet */
-
-  .testimonials__dots {
-    display: none;
+  .testimonials-carousel__arrow--next {
+    inset-inline-end: -20px;
   }
 
   /* About Teaser */
@@ -1544,15 +1463,6 @@ button {
   .benefit__heading {
     font-size: 20px;
     line-height: 28px;
-  }
-
-  /* Testimonials: show all 3 */
-  .testimonials__track {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .testimonial-card:nth-child(3) {
-    display: flex;
   }
 
   /* About Teaser */
@@ -1825,6 +1735,50 @@ button {
 
 .hero-split__arrow--next {
   inset-inline-end: 16px;
+}
+
+/* --- DOT INDICATORS (mobile only, hidden on desktop) --- */
+.hero-split__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.hero-split__dot {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  min-height: unset;
+}
+
+.hero-split__dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.hero-split__dot--active::after {
+  background: white;
+  width: 10px;
+  height: 10px;
 }
 
 /* Reduced motion — disable transitions and auto-rotation */
@@ -2534,10 +2488,9 @@ button {
 .story-photo img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
   display: block;
-  background-color: var(--color-light-teal-bg);
 }
 
 /* =============================================================================
@@ -2801,9 +2754,13 @@ button {
     line-height: 28px;
   }
 
-  /* Show arrows on desktop */
+  /* Show arrows on desktop, hide dots */
   .hero-split__arrow {
     display: flex;
+  }
+
+  .hero-split__dots {
+    display: none;
   }
 
   /* About teaser photo: aspect-ratio set in section 26, no height override needed */
@@ -2838,10 +2795,9 @@ button {
 .about-story__photo-float img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
   display: block;
-  background-color: var(--color-light-teal-bg);
 }
 
 /* Closing paragraph block — adds spacing before second story row */
@@ -2856,10 +2812,6 @@ button {
 }
 
 @media (min-width: 768px) {
-  .about-story__photo-float img {
-    height: 340px;
-  }
-
   /* Side layout: photo at 38% width, text fills the rest */
   .story-layout--side .about-story__photo-float {
     flex: 0 0 38%;
@@ -2872,12 +2824,6 @@ button {
   /* Reverse order: row-reverse so the second photo appears on opposite side */
   .story-layout--reverse.story-layout--side {
     flex-direction: row-reverse;
-  }
-}
-
-@media (min-width: 1024px) {
-  .about-story__photo-float img {
-    height: 400px;
   }
 }
 
@@ -3404,13 +3350,6 @@ a:active:not(.btn):not(.navbar__nav-link):not(.footer__link) {
   /* ---- Benefits ---- */
   .benefit {
     padding-block: var(--space-1); /* 8px */
-  }
-
-  /* ---- Testimonials ---- */
-  .testimonials__track {
-    margin-inline: calc(-1 * var(--space-2)); /* -16px */
-    padding-inline: var(--space-2);
-    scroll-padding-inline-start: var(--space-2);
   }
 
   /* ---- Page hero ---- */

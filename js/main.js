@@ -23,7 +23,7 @@ ready(function () {
   initScrollAnimations();
   initNavbarScroll();
   initSmoothScroll();
-  initTestimonialDots();
+  initTestimonialsCarousel();
   initWhatsAppPulse();
   initHeroSplit();
   initLightbox();
@@ -168,44 +168,74 @@ function initSmoothScroll() {
 }
 
 /* =============================================================================
-   6. Testimonial Carousel Dot Indicators (Mobile)
+   6. Testimonials Image Carousel
+   Shows 3 recommendation images at a time on desktop, 1 on mobile.
+   Left/right arrows navigate between pages.
 ============================================================================= */
-function initTestimonialDots() {
-  const track = document.querySelector('.testimonials__track');
-  const dots = document.querySelectorAll('.testimonials__dot');
+function initTestimonialsCarousel() {
+  var carousel = document.querySelector('.testimonials-carousel');
+  if (!carousel) return;
 
-  if (!track || !dots.length) return;
+  var track = carousel.querySelector('.testimonials-carousel__track');
+  var slides = carousel.querySelectorAll('.testimonials-carousel__slide');
+  var prevBtn = carousel.querySelector('.testimonials-carousel__arrow--prev');
+  var nextBtn = carousel.querySelector('.testimonials-carousel__arrow--next');
 
-  function updateDots() {
-    const style = window.getComputedStyle(track);
-    if (style.overflowX !== 'scroll') return;
+  if (!slides.length) return;
 
-    const cards = track.querySelectorAll('.testimonial-card');
-    if (!cards.length) return;
+  var TOTAL = slides.length;
+  var currentPage = 0;
 
-    const trackRect = track.getBoundingClientRect();
-    const trackCenter = trackRect.left + trackRect.width / 2;
+  function getPerView() {
+    return window.innerWidth >= 768 ? 3 : 1;
+  }
 
-    let closestIndex = 0;
-    let closestDistance = Infinity;
+  function getTotalPages() {
+    return Math.ceil(TOTAL / getPerView());
+  }
 
-    cards.forEach(function (card, index) {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const distance = Math.abs(cardCenter - trackCenter);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
+  function goToPage(page) {
+    var perView = getPerView();
+    var totalPages = getTotalPages();
+    page = Math.max(0, Math.min(page, totalPages - 1));
+    currentPage = page;
+
+    var offset = page * perView;
+    var slideWidth = slides[0].offsetWidth;
+    var isRTL = document.documentElement.dir === 'rtl';
+    var translateX = offset * slideWidth;
+    track.style.transform = 'translateX(' + (isRTL ? translateX : -translateX) + 'px)';
+
+    if (prevBtn) {
+      prevBtn.style.opacity = currentPage <= 0 ? '0.3' : '';
+      prevBtn.style.pointerEvents = currentPage <= 0 ? 'none' : '';
+    }
+    if (nextBtn) {
+      nextBtn.style.opacity = currentPage >= totalPages - 1 ? '0.3' : '';
+      nextBtn.style.pointerEvents = currentPage >= totalPages - 1 ? 'none' : '';
+    }
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      goToPage(currentPage - 1);
     });
-
-    dots.forEach(function (dot, index) {
-      dot.classList.toggle('testimonials__dot--active', index === closestIndex);
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      goToPage(currentPage + 1);
     });
   }
 
-  track.addEventListener('scroll', updateDots, { passive: true });
-  window.addEventListener('resize', updateDots, { passive: true });
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      goToPage(currentPage);
+    }, 150);
+  });
+
+  goToPage(0);
 }
 
 /* =============================================================================
@@ -247,6 +277,28 @@ function initHeroSplit() {
   // Check reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- Dot indicators (mobile — generated dynamically) ---- */
+  var dotsContainer = imagePanel.querySelector('.hero-split__dots');
+  var dots = [];
+
+  if (dotsContainer) {
+    for (var i = 0; i < TOTAL; i++) {
+      var dot = document.createElement('button');
+      dot.className = 'hero-split__dot' + (i === 0 ? ' hero-split__dot--active' : '');
+      dot.setAttribute('aria-label', '\u05E9\u05E7\u05D5\u05E4\u05D9\u05EA ' + (i + 1));
+      dot.setAttribute('type', 'button');
+      (function (idx) {
+        dot.addEventListener('click', function () {
+          goToSlide(idx);
+          stopAuto();
+          resumeAfterDelay();
+        });
+      })(i);
+      dotsContainer.appendChild(dot);
+      dots.push(dot);
+    }
+  }
+
   /* ---- Navigation ---- */
   function goToSlide(index) {
     // Wrap around
@@ -261,6 +313,11 @@ function initHeroSplit() {
     // Incoming slide
     slides[currentIndex].classList.add('hero-split__slide--active');
     slides[currentIndex].removeAttribute('aria-hidden');
+
+    // Update dots
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.toggle('hero-split__dot--active', d === currentIndex);
+    }
   }
 
   function nextSlide() { goToSlide(currentIndex + 1); }
