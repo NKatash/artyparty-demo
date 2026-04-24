@@ -2260,9 +2260,6 @@ button {
   position: relative;
   background-color: var(--color-light-coral-bg);
   aspect-ratio: 3 / 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .gallery-grid--fundays .gallery-item {
@@ -2275,6 +2272,7 @@ button {
   inset: 0;
   background: rgba(0, 0, 0, 0);
   transition: background var(--transition-hover);
+  pointer-events: none;
 }
 
 .gallery-item:hover::after {
@@ -2282,6 +2280,8 @@ button {
 }
 
 .gallery-item img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -2292,6 +2292,18 @@ button {
 
 .gallery-item:hover img {
   transform: scale(1.04);
+}
+
+/* Gallery grids opt out of .fade-in-up opacity animation.
+   On mobile 1-column layout a tall grid (17+ items) exceeds the viewport by
+   more than 6× — the IntersectionObserver threshold (0.15 = 15% visible) can
+   never be reached and the grid would stay at opacity 0 forever. Items are
+   still clickable because pointer-events aren't disabled, which is why the
+   lightbox worked while thumbnails were invisible. */
+.gallery-grid.fade-in-up,
+.gallery-grid.fade-in-up.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* =============================================================================
@@ -2958,6 +2970,8 @@ button {
 
 /* Images fill their container at natural proportions */
 .gallery-grid--studio .gallery-item img {
+  position: static;         /* Reset the absolute positioning used by grid items */
+  inset: auto;
   width: 100%;
   height: auto;             /* Natural height — no cropping */
   object-fit: unset;
