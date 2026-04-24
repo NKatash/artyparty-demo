@@ -3272,6 +3272,16 @@ a:active:not(.btn):not(.navbar__nav-link):not(.footer__link) {
   height: 44px;
 }
 
+/* --- Hamburger: move to right side in RTL mobile layout --- */
+/* In RTL flex row, lower order = appears further RIGHT.
+   order: -1 on hamburger makes it the first flex item → rightmost position.
+   The logo (order: 0) sits to its left, both clustered on the right. */
+@media (max-width: 767px) {
+  .navbar__hamburger {
+    order: -1;
+  }
+}
+
 /* --- WhatsApp float + Final CTA clearance (all mobile) --- */
 @media (max-width: 767px) {
   .whatsapp-float {
@@ -3445,3 +3455,56 @@ a:active:not(.btn):not(.navbar__nav-link):not(.footer__link) {
     gap: var(--space-2); /* 16px */
   }
 }
+
+/* =============================================================================
+   Camps Schedule Section — zoomable schedule image
+============================================================================= */
+.schedule-image-wrap {
+  max-width: 1000px;
+  margin-inline: auto;
+  margin-block-start: var(--space-4);
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  cursor: zoom-in;
+  position: relative;
+  background-color: var(--color-white);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.10);
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.schedule-image-wrap:hover,
+.schedule-image-wrap:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
+}
+
+.schedule-image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background var(--transition-hover);
+}
+
+.schedule-image-wrap:hover::after {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.schedule-image-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.schedule-zoom-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-gray-text);
+  margin-block-start: var(--space-2);
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
